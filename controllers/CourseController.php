@@ -20,9 +20,9 @@ class CourseController {
         }
         
         $user_id = $_SESSION['user_id'];
-        $sql = "SELECT id FROM universities WHERE user_id = '$user_id'";
-        $result = $db->query($sql);
-        $uni_row = $result->fetch_assoc();
+        $stmt = $db->prepare("SELECT id FROM universities WHERE user_id = ?");
+        $stmt->execute([$user_id]);
+        $uni_row = $stmt->fetch();
 
         if (!$uni_row) {
             echo "Please create a university profile first.";
@@ -55,9 +55,9 @@ class CourseController {
         }
             
         $user_id = $_SESSION['user_id'];
-        $sql = "SELECT id FROM universities WHERE user_id = '$user_id'";
-        $result = $db->query($sql);
-        $uni_row = $result->fetch_assoc();
+        $stmt = $db->prepare("SELECT id FROM universities WHERE user_id = ?");
+        $stmt->execute([$user_id]);
+        $uni_row = $stmt->fetch();
         $university_id = $uni_row['id'];
 
         $department = $_POST['department'] ?? '';

@@ -7,48 +7,37 @@ class University {
     }
 
     function getProfile($user_id) {
-        $sql = "SELECT u.username, u.email, un.id, un.name as university_name, un.location, un.description 
-                FROM users u 
-                LEFT JOIN universities un ON u.id = un.user_id 
-                WHERE u.id = '$user_id'";
-        
-        $result = $this->conn->query($sql);
-        return $result->fetch_assoc();
+        $stmt = $this->conn->prepare(
+            "SELECT u.username, u.email, un.id, un.name as university_name, un.location, un.description 
+             FROM users u 
+             LEFT JOIN universities un ON u.id = un.user_id 
+             WHERE u.id = ?"
+        );
+        $stmt->execute([$user_id]);
+        return $stmt->fetch();
     }
 
     function updateProfile($user_id, $university_name, $location, $description) {
-        $check = "SELECT * FROM universities WHERE user_id = '$user_id'";
-        $result = $this->conn->query($check);
+        $check = $this->conn->prepare("SELECT * FROM universities WHERE user_id = ?");
+        $check->execute([$user_id]);
 
-        if ($result->num_rows > 0) {
-            $sql = "UPDATE universities SET name='$university_name', location='$location', description='$description' WHERE user_id='$user_id'";
+        if ($check->rowCount() > 0) {
+            $stmt = $this->conn->prepare("UPDATE universities SET name=?, location=?, description=? WHERE user_id=?");
+            return $stmt->execute([$university_name, $location, $description, $user_id]);
         } else {
-            $sql = "INSERT INTO universities (user_id, name, location, description) VALUES ('$user_id', '$university_name', '$location', '$description')";
-        }
-
-        if ($this->conn->query($sql) === TRUE) {
-            return true;
-        } else {
-            return false;
+            $stmt = $this->conn->prepare("INSERT INTO universities (user_id, name, location, description) VALUES (?, ?, ?, ?)");
+            return $stmt->execute([$user_id, $university_name, $location, $description]);
         }
     }
 
     function getAll() {
-        $sql = "SELECT id, name, location FROM universities";
-        $result = $this->conn->query($sql);
-        $universities = [];
-        if ($result->num_rows > 0) {
-            while($row = $result->fetch_assoc()) {
-                $universities[] = $row;
-            }
-        }
-        return $universities;
+        $stmt = $this->conn->query("SELECT id, name, location FROM universities");
+        return $stmt->fetchAll();
     }
 
     function getById($id) {
-        $sql = "SELECT * FROM universities WHERE id = '$id'";
-        $result = $this->conn->query($sql);
-        return $result->fetch_assoc();
+        $stmt = $this->conn->prepare("SELECT * FROM universities WHERE id = ?");
+        $stmt->execute([$id]);
+        return $stmt->fetch();
     }
 }
-?>

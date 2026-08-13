@@ -5,46 +5,29 @@ class User {
     function __construct($db) {
         $this->conn = $db;
     }
+
     function emailExists($email) {
-        $sql = "SELECT * FROM users WHERE email = '$email'";
-        $result = $this->conn->query($sql);
-        
-        if ($result->num_rows > 0) {
-            return true;
-        } else {
-            return false;
-        }
+        $stmt = $this->conn->prepare("SELECT * FROM users WHERE email = ?");
+        $stmt->execute([$email]);
+        return $stmt->rowCount() > 0;
     }
 
     function register($username, $email, $password, $role) {
-        $sql = "INSERT INTO users (username, email, password, role) VALUES ('$username', '$email', '$password', '$role')";
-        
-        if ($this->conn->query($sql) === TRUE) {
-            return true;
-        } else {
-            return false;
-        }
+        $stmt = $this->conn->prepare("INSERT INTO users (username, email, password, role) VALUES (?, ?, ?, ?)");
+        return $stmt->execute([$username, $email, $password, $role]);
     }
 
     function login($email, $password) {
-        $sql = "SELECT * FROM users WHERE email = '$email' AND password = '$password'";
-        $result = $this->conn->query($sql);
-
-        if ($result->num_rows > 0) {
-            return $result->fetch_assoc();
-        } else {
-            return false;
+        $stmt = $this->conn->prepare("SELECT * FROM users WHERE email = ? AND password = ?");
+        $stmt->execute([$email, $password]);
+        if ($stmt->rowCount() > 0) {
+            return $stmt->fetch();
         }
+        return false;
     }
 
     function updatePassword($email, $new_password) {
-        $sql = "UPDATE users SET password = '$new_password' WHERE email = '$email'";
-        
-        if ($this->conn->query($sql) === TRUE) {
-            return true;
-        } else {
-            return false;
-        }
+        $stmt = $this->conn->prepare("UPDATE users SET password = ? WHERE email = ?");
+        return $stmt->execute([$new_password, $email]);
     }
 }
-?>

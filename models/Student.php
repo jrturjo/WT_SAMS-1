@@ -7,30 +7,26 @@ class Student {
     }
 
     function getProfile($user_id) {
-        $sql = "SELECT s.id, u.username, u.email, s.name, s.phone, s.current_university, s.address 
-                FROM users u 
-                LEFT JOIN students s ON u.id = s.user_id 
-                WHERE u.id = '$user_id'";
-        
-        $result = $this->conn->query($sql);
-        return $result->fetch_assoc();
+        $stmt = $this->conn->prepare(
+            "SELECT s.id, u.username, u.email, s.name, s.phone, s.current_university, s.address 
+             FROM users u 
+             LEFT JOIN students s ON u.id = s.user_id 
+             WHERE u.id = ?"
+        );
+        $stmt->execute([$user_id]);
+        return $stmt->fetch();
     }
 
     function updateProfile($user_id, $name, $phone, $address) {
-        $check = "SELECT * FROM students WHERE user_id = '$user_id'";
-        $result = $this->conn->query($check);
+        $check = $this->conn->prepare("SELECT * FROM students WHERE user_id = ?");
+        $check->execute([$user_id]);
 
-        if ($result->num_rows > 0) {
-            $sql = "UPDATE students SET name='$name', phone='$phone', address='$address' WHERE user_id='$user_id'";
+        if ($check->rowCount() > 0) {
+            $stmt = $this->conn->prepare("UPDATE students SET name=?, phone=?, address=? WHERE user_id=?");
+            return $stmt->execute([$name, $phone, $address, $user_id]);
         } else {
-            $sql = "INSERT INTO students (user_id, name, phone, address) VALUES ('$user_id', '$name', '$phone', '$address')";
-        }
-
-        if ($this->conn->query($sql) === TRUE) {
-            return true;
-        } else {
-            return false;
+            $stmt = $this->conn->prepare("INSERT INTO students (user_id, name, phone, address) VALUES (?, ?, ?, ?)");
+            return $stmt->execute([$user_id, $name, $phone, $address]);
         }
     }
 }
-?>

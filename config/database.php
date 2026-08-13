@@ -10,17 +10,17 @@ class Database {
             $pass = getenv('DB_PASS') ?: '';
             $name = getenv('DB_NAME') ?: 'sams_db';
 
-            $this->conn = new mysqli($host, $user, $pass, $name);
-
-            if ($this->conn->connect_error) {
-                error_log("DB Connection Error: " . $this->conn->connect_error);
-                $this->conn = null;
-                return null;
-            }
-
-            $this->conn->set_charset("utf8mb4");
-        } catch(Exception $e) {
-            error_log("DB Exception: " . $e->getMessage());
+            $this->conn = new PDO(
+                "mysql:host=$host;dbname=$name;charset=utf8mb4",
+                $user,
+                $pass,
+                [
+                    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
+                ]
+            );
+        } catch(PDOException $e) {
+            error_log("DB Connection Error: " . $e->getMessage());
             $this->conn = null;
         }
         return $this->conn;
