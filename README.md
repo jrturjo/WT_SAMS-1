@@ -118,7 +118,7 @@ WT_SAMS/
 
 5. **Access the application**
    ```
-   http://localhost/WT_SAMS/
+   https://github.com/jrturjo/WT_SAMS-1
    ```
 
 ## Deployment to Railway

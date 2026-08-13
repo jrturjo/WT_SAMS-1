@@ -19,7 +19,7 @@
         <p class="partners-subtitle">We collaborate with leading institutions to bring you the best study abroad experience</p>
 
         <div class="partner-grid">
-            <a href="https://www.aiub.edu/aiub-permanent-campus" target="_blank" rel="noopener noreferrer" class="partner-card">
+            <a href="https://www.aiub.edu" target="_blank" rel="noopener noreferrer" class="partner-card">
                 <div class="partner-img-wrapper">
                     <img src="https://www.aiub.edu/Files/Uploads/original/new_campus_pic_2.jpg" alt="AIUB Campus" class="partner-img">
                 </div>
@@ -28,7 +28,7 @@
                 <span class="partner-link">Visit Website &rarr;</span>
             </a>
 
-            <a href="https://www.bracu.ac.bd/student-life/brac-university-campus" target="_blank" rel="noopener noreferrer" class="partner-card">
+            <a href="https://www.bracu.ac.bd" target="_blank" rel="noopener noreferrer" class="partner-card">
                 <div class="partner-img-wrapper">
                     <img src="https://www.bracu.ac.bd/sites/default/files/uploads/2025/07/01/sun_drance.jpg" alt="BRAC University Campus" class="partner-img">
                 </div>
@@ -39,7 +39,7 @@
 
             <a href="https://www.northsouth.edu" target="_blank" rel="noopener noreferrer" class="partner-card">
                 <div class="partner-img-wrapper">
-                    <img src="https://old.thefinancialexpress.com.bd/uploads/1606392293.jpg" alt="NSU Campus" class="partner-img">
+                    <img src="https://urquery.com/storage/2021/07/NSU-inside-the-campus.jpg" alt="NSU Campus" class="partner-img">
                 </div>
                 <h3>North South University</h3>
                 <p>A premier private university offering diverse programs and international partnerships.</p>
