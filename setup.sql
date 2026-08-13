@@ -1,7 +1,4 @@
-CREATE DATABASE IF NOT EXISTS sams_db;
-USE sams_db;
-
-CREATE TABLE users (
+CREATE TABLE IF NOT EXISTS users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50),
     email VARCHAR(100),
@@ -9,7 +6,7 @@ CREATE TABLE users (
     role VARCHAR(20)
 );
 
-CREATE TABLE students (
+CREATE TABLE IF NOT EXISTS students (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT,
     name VARCHAR(100),
@@ -18,7 +15,7 @@ CREATE TABLE students (
     address TEXT
 );
 
-CREATE TABLE universities (
+CREATE TABLE IF NOT EXISTS universities (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT,
     name VARCHAR(100),
@@ -28,14 +25,14 @@ CREATE TABLE universities (
     description TEXT
 );
 
-CREATE TABLE courses (
+CREATE TABLE IF NOT EXISTS courses (
     id INT AUTO_INCREMENT PRIMARY KEY,
     university_id INT,
     course_name VARCHAR(100),
     department VARCHAR(100)
 );
 
-CREATE TABLE applications (
+CREATE TABLE IF NOT EXISTS applications (
     id INT AUTO_INCREMENT PRIMARY KEY,
     student_id INT,
     university_id INT,
@@ -44,7 +41,7 @@ CREATE TABLE applications (
     feedback TEXT
 );
 
-CREATE TABLE feedback (
+CREATE TABLE IF NOT EXISTS feedback (
     id INT AUTO_INCREMENT PRIMARY KEY,
     student_id INT,
     university_id INT,

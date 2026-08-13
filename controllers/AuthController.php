@@ -10,10 +10,17 @@ class AuthController {
 
         $database = new Database();
         $db = $database->getConnection();
+
+        if (!$db) {
+            $error = "Database connection failed. Please try again later.";
+            require_once 'views/auth/login.php';
+            return;
+        }
+
         $user = new User($db);
 
-        $email = $_POST['email'];
-        $password = $_POST['password'];
+        $email = $_POST['email'] ?? '';
+        $password = $_POST['password'] ?? '';
 
         $result = $user->login($email, $password);
 
@@ -22,7 +29,9 @@ class AuthController {
             $_SESSION['username'] = $result['username'];
             $_SESSION['role'] = $result['role'];
             header("Location: index.php?url=dashboard");
+            exit;
         } else {
+            $error = "Invalid email or password.";
             require_once 'views/auth/login.php';
         }
     }
@@ -30,6 +39,7 @@ class AuthController {
     public function logout() {
         session_destroy();
         header("Location: index.php?url=login");
+        exit;
     }
 
     public function resetPassword() {
@@ -42,10 +52,17 @@ class AuthController {
 
         $database = new Database();
         $db = $database->getConnection();
+
+        if (!$db) {
+            $error = "Database connection failed. Please try again later.";
+            require_once 'views/auth/reset_password.php';
+            return;
+        }
+
         $user = new User($db);
 
-        $email = $_POST['email'];
-        $new_password = $_POST['new_password'];
+        $email = $_POST['email'] ?? '';
+        $new_password = $_POST['new_password'] ?? '';
 
         if ($user->emailExists($email)) {
             if ($user->updatePassword($email, $new_password)) {
@@ -69,6 +86,13 @@ class AuthController {
 
         $database = new Database();
         $db = $database->getConnection();
+
+        if (!$db) {
+            $error = "Database connection failed. Please try again later.";
+            require_once 'views/auth/register.php';
+            return;
+        }
+
         $user = new User($db);
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {

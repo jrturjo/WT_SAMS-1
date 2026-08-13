@@ -4,7 +4,7 @@ class UniversityController {
     public function profile() {
         if (!isset($_SESSION['user_id'])) {
             header("Location: index.php?url=login");
-            exit();
+            exit;
         }
 
         require_once 'config/database.php';
@@ -12,6 +12,12 @@ class UniversityController {
 
         $database = new Database();
         $db = $database->getConnection();
+
+        if (!$db) {
+            echo "Database connection failed.";
+            return;
+        }
+
         $university = new University($db);
 
         $user_id = $_SESSION['user_id'];
@@ -20,7 +26,7 @@ class UniversityController {
         
         if (!$data) {
             echo "User not found";
-            exit();
+            return;
         }
         
         require_once 'views/university/profile.php';
@@ -29,7 +35,7 @@ class UniversityController {
     public function updateProfile() {
         if (!isset($_SESSION['user_id'])) {
             header("Location: index.php?url=login");
-            exit();
+            exit;
         }
 
         require_once 'config/database.php';
@@ -37,6 +43,12 @@ class UniversityController {
 
         $database = new Database();
         $db = $database->getConnection();
+
+        if (!$db) {
+            header("Location: index.php?url=university_profile");
+            exit;
+        }
+
         $university = new University($db);
 
         $user_id = $_SESSION['user_id'];
@@ -61,6 +73,12 @@ class UniversityController {
 
         $database = new Database();
         $db = $database->getConnection();
+
+        if (!$db) {
+            echo json_encode([]);
+            return;
+        }
+
         $university = new University($db);
 
         $universities = $university->getAll();
@@ -74,6 +92,12 @@ class UniversityController {
 
         $database = new Database();
         $db = $database->getConnection();
+
+        if (!$db) {
+            echo json_encode(null);
+            return;
+        }
+
         $university = new University($db);
 
         require_once 'models/Course.php';
@@ -93,7 +117,7 @@ class UniversityController {
     public function applications() {
         if (!isset($_SESSION['user_id'])) {
             header("Location: index.php?url=login");
-            exit();
+            exit;
         }
 
         require_once 'config/database.php';
@@ -102,6 +126,12 @@ class UniversityController {
 
         $database = new Database();
         $db = $database->getConnection();
+
+        if (!$db) {
+            echo "Database connection failed.";
+            return;
+        }
+
         $university = new University($db);
         $app = new Application($db);
 
@@ -122,7 +152,7 @@ class UniversityController {
         
         if (!isset($_SESSION['user_id'])) {
             echo json_encode(['success' => false, 'message' => 'Not logged in']);
-            exit();
+            exit;
         }
 
         require_once 'config/database.php';
@@ -130,10 +160,16 @@ class UniversityController {
 
         $database = new Database();
         $db = $database->getConnection();
+
+        if (!$db) {
+            echo json_encode(['success' => false, 'message' => 'Database connection failed']);
+            exit;
+        }
+
         $app = new Application($db);
 
-        $id = $_POST['id'];
-        $status = $_POST['status'];
+        $id = $_POST['id'] ?? 0;
+        $status = $_POST['status'] ?? '';
 
         if ($app->updateStatus($id, $status)) {
             echo json_encode(['success' => true]);
@@ -141,12 +177,13 @@ class UniversityController {
             echo json_encode(['success' => false, 'message' => 'Update failed']);
         }
     }
+
     public function updateApplicationFeedback() {
         header('Content-Type: application/json');
         
         if (!isset($_SESSION['user_id'])) {
             echo json_encode(['success' => false, 'message' => 'Not logged in']);
-            exit();
+            exit;
         }
 
         require_once 'config/database.php';
@@ -154,10 +191,16 @@ class UniversityController {
 
         $database = new Database();
         $db = $database->getConnection();
+
+        if (!$db) {
+            echo json_encode(['success' => false, 'message' => 'Database connection failed']);
+            exit;
+        }
+
         $app = new Application($db);
 
-        $id = $_POST['id'];
-        $feedback = $_POST['feedback'];
+        $id = $_POST['id'] ?? 0;
+        $feedback = $_POST['feedback'] ?? '';
 
         if ($app->sendFeedback($id, $feedback)) {
             echo json_encode(['success' => true]);
@@ -166,4 +209,3 @@ class UniversityController {
         }
     }
 }
-?>

@@ -4,7 +4,7 @@ class StudentController {
     public function profile() {
         if (!isset($_SESSION['user_id'])) {
             header("Location: index.php?url=login");
-            exit();
+            exit;
         }
 
         require_once 'config/database.php';
@@ -12,6 +12,12 @@ class StudentController {
 
         $database = new Database();
         $db = $database->getConnection();
+
+        if (!$db) {
+            echo "Database connection failed.";
+            return;
+        }
+
         $student = new Student($db);
 
         $user_id = $_SESSION['user_id'];
@@ -20,7 +26,7 @@ class StudentController {
         
         if (!$data) {
             echo "User not found";
-            exit();
+            return;
         }
         
         require_once 'views/student/profile.php';
@@ -29,17 +35,28 @@ class StudentController {
     public function universities() {
         if (!isset($_SESSION['user_id'])) {
             header("Location: index.php?url=login");
-            exit();
+            exit;
         }
         require_once 'views/student/universities.php';
     }
 
     public function updateProfile() {
+        if (!isset($_SESSION['user_id'])) {
+            header("Location: index.php?url=login");
+            exit;
+        }
+
         require_once 'config/database.php';
         require_once 'models/Student.php';
 
         $database = new Database();
         $db = $database->getConnection();
+
+        if (!$db) {
+            header("Location: index.php?url=profile");
+            exit;
+        }
+
         $student = new Student($db);
 
         $user_id = $_SESSION['user_id'];
@@ -60,7 +77,7 @@ class StudentController {
     public function history() {
         if (!isset($_SESSION['user_id'])) {
             header("Location: index.php?url=login");
-            exit();
+            exit;
         }
 
         require_once 'config/database.php';
@@ -69,6 +86,12 @@ class StudentController {
 
         $database = new Database();
         $db = $database->getConnection();
+
+        if (!$db) {
+            echo "Database connection failed.";
+            return;
+        }
+
         $student = new Student($db);
         $app = new Application($db);
 
@@ -84,4 +107,3 @@ class StudentController {
         }
     }
 }
-?>

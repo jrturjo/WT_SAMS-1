@@ -6,7 +6,7 @@ class ApplicationController {
         
         if (!isset($_SESSION['user_id'])) {
             echo json_encode(['success' => false, 'message' => 'Not logged in']);
-            exit();
+            exit;
         }
 
         require_once 'config/database.php';
@@ -15,15 +15,19 @@ class ApplicationController {
 
         $database = new Database();
         $db = $database->getConnection();
+
+        if (!$db) {
+            echo json_encode(['success' => false, 'message' => 'Database connection failed']);
+            exit;
+        }
         
-        // Get student ID
         $user_id = $_SESSION['user_id'];
         $studentModel = new Student($db);
         $studentProfile = $studentModel->getProfile($user_id);
         
         if (!$studentProfile) {
             echo json_encode(['success' => false, 'message' => 'Student profile not found']);
-            exit();
+            exit;
         }
         
         $student_id = $studentProfile['id'];
@@ -34,8 +38,8 @@ class ApplicationController {
             $student_id = $studentProfile['id'];
         }
 
-        $university_id = $_POST['university_id'];
-        $course_name = $_POST['course_name'];
+        $university_id = $_POST['university_id'] ?? 0;
+        $course_name = $_POST['course_name'] ?? '';
 
         $appModel = new Application($db);
         if ($appModel->apply($student_id, $university_id, $course_name)) {
@@ -45,4 +49,3 @@ class ApplicationController {
         }
     }
 }
-?>

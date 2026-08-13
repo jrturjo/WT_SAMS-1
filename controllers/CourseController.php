@@ -4,7 +4,7 @@ class CourseController {
     public function manageCourses() {
         if (!isset($_SESSION['user_id'])) {
             header("Location: index.php?url=login");
-            exit();
+            exit;
         }
 
         require_once 'config/database.php';
@@ -13,6 +13,11 @@ class CourseController {
 
         $database = new Database();
         $db = $database->getConnection();
+
+        if (!$db) {
+            echo "Database connection failed.";
+            return;
+        }
         
         $user_id = $_SESSION['user_id'];
         $sql = "SELECT id FROM universities WHERE user_id = '$user_id'";
@@ -21,7 +26,7 @@ class CourseController {
 
         if (!$uni_row) {
             echo "Please create a university profile first.";
-            exit();
+            return;
         }
         
         $university_id = $uni_row['id'];
@@ -35,7 +40,7 @@ class CourseController {
     public function addCourse() {
         if (!isset($_SESSION['user_id'])) {
             header("Location: index.php?url=login");
-            exit();
+            exit;
         }
 
         require_once 'config/database.php';
@@ -43,6 +48,11 @@ class CourseController {
 
         $database = new Database();
         $db = $database->getConnection();
+
+        if (!$db) {
+            header("Location: index.php?url=manage_courses");
+            exit;
+        }
             
         $user_id = $_SESSION['user_id'];
         $sql = "SELECT id FROM universities WHERE user_id = '$user_id'";
@@ -50,19 +60,20 @@ class CourseController {
         $uni_row = $result->fetch_assoc();
         $university_id = $uni_row['id'];
 
-        $department = $_POST['department'];
-        $course_name = $_POST['course_name'];
+        $department = $_POST['department'] ?? '';
+        $course_name = $_POST['course_name'] ?? '';
 
         $courseModel = new Course($db);
         $courseModel->addCourse($university_id, $department, $course_name);
         
         header("Location: index.php?url=manage_courses");
+        exit;
     }
 
     public function removeCourse() {
         if (!isset($_SESSION['user_id'])) {
             header("Location: index.php?url=login");
-            exit();
+            exit;
         }
 
         require_once 'config/database.php';
@@ -70,13 +81,18 @@ class CourseController {
 
         $database = new Database();
         $db = $database->getConnection();
+
+        if (!$db) {
+            header("Location: index.php?url=manage_courses");
+            exit;
+        }
         
-        $id = $_GET['id'];
+        $id = $_GET['id'] ?? 0;
         
         $courseModel = new Course($db);
         $courseModel->removeCourse($id);
         
         header("Location: index.php?url=manage_courses");
+        exit;
     }
 }
-?>
