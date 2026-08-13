@@ -3,7 +3,9 @@ session_start();
 
 $url = $_GET['url'] ?? '';
 
-if ($url == '' || $url == 'login') {
+if ($url == '') {
+    include 'views/landing.php';
+} elseif ($url == 'login') {
     include 'controllers/AuthController.php';
     $auth = new AuthController();
     $auth->login();

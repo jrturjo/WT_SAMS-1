@@ -1,18 +1,33 @@
 <?php include 'views/layouts/header.php'; ?>
 
-<h2>Reset Password</h2>
-<?php if (isset($success)): ?>
-    <p style="color: green;"><?php echo $success; ?></p>
-<?php endif; ?>
-<?php if (isset($error)): ?>
-    <p style="color: red;"><?php echo $error; ?></p>
-<?php endif; ?>
+<div class="auth-container">
+    <div class="auth-card">
+        <h2>Reset Password</h2>
+        <p class="subtitle">Enter your email and new password</p>
 
-<form action="index.php?url=reset_password_submit" method="POST">
-    <label>Email:</label> <input type="email" name="email" required><br>
-    <label>New Password:</label> <input type="password" name="new_password" required><br>
-    <button type="submit">Reset Password</button>
-</form>
-<a href="index.php?url=login">Back to Login</a>
+        <?php if (isset($success)): ?>
+            <div class="alert alert-success"><?php echo htmlspecialchars($success); ?></div>
+        <?php endif; ?>
+        <?php if (isset($error)): ?>
+            <div class="alert alert-error"><?php echo htmlspecialchars($error); ?></div>
+        <?php endif; ?>
+
+        <form action="index.php?url=reset_password_submit" method="POST">
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" placeholder="you@example.com" required>
+            </div>
+            <div class="form-group">
+                <label for="new_password">New Password</label>
+                <input type="password" id="new_password" name="new_password" placeholder="Enter new password" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Reset Password</button>
+        </form>
+
+        <div class="auth-links">
+            <a href="index.php?url=login">Back to Sign In</a>
+        </div>
+    </div>
+</div>
 
 <?php include 'views/layouts/footer.php'; ?>

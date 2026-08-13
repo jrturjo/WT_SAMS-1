@@ -1,0 +1,8 @@
+{
+    "name": "wt-sams/study-abroad-management-system",
+    "description": "Study Abroad Management System",
+    "type": "project",
+    "require": {
+        "php": ">=8.0"
+    }
+}

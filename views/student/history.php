@@ -1,31 +1,40 @@
 <?php include 'views/layouts/header.php'; ?>
 
-<center>
-    <h2>Application History</h2>
-    
-    <?php if (empty($applications)): ?>
-        <p>No applications found.</p>
-    <?php else: ?>
-        <table border="1" style="border-collapse: collapse; width: 80%; margin-top: 20px;">
-            <tr style="background-color: #f2f2f2;">
-                <th style="padding: 10px;">University</th>
-                <th style="padding: 10px;">Course</th>
-                <th style="padding: 10px;">Status</th>
-                <th style="padding: 10px;">Feedback</th>
-            </tr>
-            <?php foreach ($applications as $app): ?>
-            <tr>
-                <td style="padding: 10px;"><?php echo htmlspecialchars($app['university_name']); ?></td>
-                <td style="padding: 10px;"><?php echo htmlspecialchars($app['course_name']); ?></td>
-                <td style="padding: 10px;"><?php echo htmlspecialchars($app['status']); ?></td>
-                <td style="padding: 10px;"><?php echo htmlspecialchars($app['feedback'] ?? ''); ?></td>
-            </tr>
-            <?php endforeach; ?>
-        </table>
-    <?php endif; ?>
+<div class="page-header">
+    <h1>Application History</h1>
+</div>
 
-    <br>
-    <p><a href="index.php?url=dashboard">Back to Dashboard</a></p>
-</center>
+<?php if (empty($applications)): ?>
+    <div class="card">
+        <div class="empty-state">
+            <p>No applications found.</p>
+        </div>
+    </div>
+<?php else: ?>
+    <div class="table-container">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>University</th>
+                    <th>Course</th>
+                    <th>Status</th>
+                    <th>Feedback</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($applications as $app): ?>
+                <tr>
+                    <td><?php echo htmlspecialchars($app['university_name']); ?></td>
+                    <td><?php echo htmlspecialchars($app['course_name']); ?></td>
+                    <td><span class="badge badge-<?php echo htmlspecialchars($app['status']); ?>"><?php echo htmlspecialchars($app['status']); ?></span></td>
+                    <td><?php echo htmlspecialchars($app['feedback'] ?? ''); ?></td>
+                </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+<?php endif; ?>
+
+<a href="index.php?url=dashboard" class="back-link">&larr; Back to Dashboard</a>
 
 <?php include 'views/layouts/footer.php'; ?>
