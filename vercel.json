@@ -2,14 +2,16 @@
   "functions": {
     "api/index.php": {
       "runtime": "vercel-php@0.9.0"
+    },
+    "api/assets.php": {
+      "runtime": "vercel-php@0.9.0"
     }
   },
   "routes": [
-    { "handle": "filesystem" },
-    { "src": "/public/(.*)", "dest": "/public/$1" },
-    { "src": "/photos/(.*)", "dest": "/photos/$1" },
-    { "src": "/api/(.*)", "dest": "/api/index.php" },
+    { "src": "/public/(.*)", "dest": "/api/assets.php?file=/public/$1" },
+    { "src": "/photos/(.*)", "dest": "/api/assets.php?file=/photos/$1" },
     { "src": "/index.php(.*)", "dest": "/api/index.php" },
+    { "src": "/api/(.*)", "dest": "/api/index.php" },
     { "src": "/(.*)", "dest": "/api/index.php" }
   ]
 }
