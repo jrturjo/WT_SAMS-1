@@ -6,12 +6,13 @@ class Database {
         $this->conn = null;
         try {
             $host = getenv('DB_HOST') ?: 'localhost';
+            $port = getenv('DB_PORT') ?: '3306';
             $user = getenv('DB_USER') ?: 'root';
             $pass = getenv('DB_PASS') ?: '';
             $name = getenv('DB_NAME') ?: 'sams_db';
 
             $this->conn = new PDO(
-                "mysql:host=$host;dbname=$name;charset=utf8mb4",
+                "mysql:host=$host;port=$port;dbname=$name;charset=utf8mb4",
                 $user,
                 $pass,
                 [
