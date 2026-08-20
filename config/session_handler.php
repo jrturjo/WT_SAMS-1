@@ -8,22 +8,22 @@ class DBSessionHandler implements SessionHandlerInterface {
         $this->db = $db;
     }
 
-    public function open($savePath, $sessionName) {
+    public function open(string $path, string $name): bool {
         return true;
     }
 
-    public function close() {
+    public function close(): bool {
         return true;
     }
 
-    public function read($id) {
+    public function read(string $id): string|false {
         $stmt = $this->db->prepare("SELECT data FROM sessions WHERE id = ?");
         $stmt->execute([$id]);
         $row = $stmt->fetch();
         return $row ? $row['data'] : '';
     }
 
-    public function write($id, $data) {
+    public function write(string $id, string $data): bool {
         $stmt = $this->db->prepare(
             "INSERT INTO sessions (id, data, last_access) VALUES (?, ?, NOW())
              ON DUPLICATE KEY UPDATE data = ?, last_access = NOW()"
@@ -31,14 +31,15 @@ class DBSessionHandler implements SessionHandlerInterface {
         return $stmt->execute([$id, $data, $data]);
     }
 
-    public function destroy($id) {
+    public function destroy(string $id): bool {
         $stmt = $this->db->prepare("DELETE FROM sessions WHERE id = ?");
         return $stmt->execute([$id]);
     }
 
-    public function gc($maxlifetime) {
+    public function gc(int $max_lifetime): int|false {
         $stmt = $this->db->prepare("DELETE FROM sessions WHERE last_access < NOW() - INTERVAL ? SECOND");
-        return $stmt->execute([$maxlifetime]);
+        $stmt->execute([$max_lifetime]);
+        return $stmt->rowCount();
     }
 }
 
