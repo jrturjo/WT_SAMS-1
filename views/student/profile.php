@@ -23,15 +23,15 @@
         </div>
         <div class="form-group">
             <label for="name">Full Name</label>
-            <input type="text" id="name" name="name" value="<?php echo htmlspecialchars($data['name']); ?>">
+            <input type="text" id="name" name="name" value="<?php echo htmlspecialchars($data['name'] ?? ''); ?>">
         </div>
         <div class="form-group">
             <label for="phone">Phone</label>
-            <input type="text" id="phone" name="phone" value="<?php echo htmlspecialchars($data['phone']); ?>">
+            <input type="text" id="phone" name="phone" value="<?php echo htmlspecialchars($data['phone'] ?? ''); ?>">
         </div>
         <div class="form-group">
             <label for="address">Address</label>
-            <input type="text" id="address" name="address" value="<?php echo htmlspecialchars($data['address']); ?>">
+            <input type="text" id="address" name="address" value="<?php echo htmlspecialchars($data['address'] ?? ''); ?>">
         </div>
         <button type="submit" class="btn btn-primary">Update Profile</button>
     </form>
